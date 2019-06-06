@@ -45,7 +45,7 @@ def test_generate_quarter_date_ranges_with_mocked_start_end_dates(mock_newest, m
 
 def test_generate_data():
     data = generate_data(Daterange('1990-01-01', '1990-03-31'))
-    assert data['d008'] == 90293829.58426961
+    assert data['d008'] == 90296183.7022473
 
 
 @patch('generate_report.generate_employee_salaries_for_date_range')

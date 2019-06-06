@@ -1,4 +1,7 @@
 #!/bin/env python
+# for python2/3 compatibility https://stackoverflow.com/a/32657822
+# division returns a float in python3 but an integer in python2.
+from __future__ import division
 import datetime
 import json
 import sys
