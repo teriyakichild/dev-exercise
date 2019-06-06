@@ -1,3 +1,4 @@
+#!/bin/env python
 import datetime
 import json
 import sys
@@ -12,6 +13,11 @@ cursor = cnx.cursor()
 
 class Daterange(object):
     def __init__(self, start, end):
+        # python3 compatibility
+        try:
+               basestring
+        except NameError:
+               basestring=str
         if isinstance(start, basestring):
             self.start_string = start
             self.start = datetime.datetime.strptime(start, '%Y-%m-%d').date()
@@ -148,7 +154,6 @@ def generate_data(daterange):
     '''
     salaries = generate_employee_salaries_for_date_range(daterange)
     total_salary = {}
-    #print 'From {0} to {1}'.format(daterange.start, daterange.end)
     for salary in salaries:
         # example salary: (53377, u'd001', datetime.date(1989, 4, 25), datetime.date(1990, 4, 25))
         dept_no = salary[1]
@@ -162,7 +167,7 @@ def generate_data(daterange):
             total_salary[dept_no] = salary_for_full_quarter * percent_overlap
 
     ret = {}
-    for department, salary in total_salary.iteritems():
+    for department, salary in total_salary.items():
         ret[department] = salary
     return ret
 
@@ -173,20 +178,20 @@ def generate_report():
     reports = {}
     # generate salary data for each quarter
     for daterange in generate_quarter_date_ranges():
-        print 'Generating data for {0} to {1}...'.format(
-            daterange.start, daterange.end)
+        print('Generating data for {0} to {1}...'.format(
+            daterange.start, daterange.end))
         reports[daterange.start] = generate_data(daterange)
 
     departments = {}
     # reformat data for outputting
-    for date, data in reports.iteritems():
-        for dept_no, salary_cost in data.iteritems():
+    for date, data in reports.items():
+        for dept_no, salary_cost in data.items():
             departments.setdefault(dept_no, {})[date] = salary_cost
 
-    for dept_no, quarterly_salaries in departments.iteritems():
-        print 'Department: {0}'.format(get_dept_name(dept_no))
-        for date, salary in sorted(quarterly_salaries.iteritems()):
-            print '\t{0}: {1}'.format(date, salary)
+    for dept_no, quarterly_salaries in departments.items():
+        print('Department: {0}'.format(get_dept_name(dept_no)))
+        for date, salary in sorted(quarterly_salaries.items()):
+            print('\t{0}: {1}'.format(date, salary))
 
 
 if __name__ == '__main__':
